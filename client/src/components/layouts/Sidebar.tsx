@@ -35,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
         {
           name: "Dashboard",
           icon: "FaHouse",
-          path: PATHS.APP.DASHBOARD,
+          path: user?.role === 'admin' ? PATHS.APP.ADMIN_DASHBOARD : PATHS.APP.VENDOR_DASHBOARD,
         },
         {
           name: "Users",

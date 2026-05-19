@@ -28,3 +28,4 @@ export const useOnClickOutside = <T extends HTMLElement>(
     };
   }, [ref, handler]);
 };
+

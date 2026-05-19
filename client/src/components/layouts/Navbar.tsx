@@ -4,7 +4,7 @@ import { PATHS } from "../../routes/path";
 import { Icon } from "../ui";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
-import { useOnClickOutside } from "../../hooks/UseOnClickOutside";
+import { useOnClickOutside } from "../../hooks/useOnClickOutside";
 import { notify } from "../../util/notify";
 import Logo from "../../assets/react.svg";
 
@@ -54,7 +54,7 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
               className="p-2 mr-2 text-text-muted rounded-lg sm:hidden focus:outline-none cursor-pointer">
               <Icon iconName="FaAlignJustify" />
             </span>
-            <Link to={PATHS.APP.DASHBOARD} className="flex gap-3 items-center">
+            <Link to={user?.role === 'admin' ? PATHS.APP.ADMIN_DASHBOARD : PATHS.APP.VENDOR_DASHBOARD} className="flex gap-3 items-center">
               <img src={Logo} alt="App Logo" />
               <span className="text-text font-black text-lg tracking-tighter uppercase italic hidden sm:block">YU ReactLaravel</span>
             </Link>
@@ -129,7 +129,7 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
                           {user.name}
                         </span>
                         <span className="text-xs text-text-muted truncate">
-                          {user.email}
+                          {user.username}
                         </span>
                       </div>
                     </div>
