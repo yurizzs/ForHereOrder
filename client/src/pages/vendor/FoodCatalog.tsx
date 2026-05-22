@@ -23,6 +23,7 @@ import FoodService from "../../services/FoodService";
 import type { Food } from "../../interfaces/food";
 import { notify } from "../../util/notify";
 import { useDebounce } from "../../hooks/index";
+import { useAuth } from "../../contexts/AuthContext";
 
 /* ==========================================================================
    TYPES & INTERFACES
@@ -40,7 +41,9 @@ type PaginationMeta = {
 };
 
 const FoodCatalog = () => {
-  const { vendorId } = useParams<{ vendorId: string }>();
+  const { vendorId: paramVendorId } = useParams<{ vendorId: string }>();
+  const { user } = useAuth();
+  const effectiveVendorId = paramVendorId || user?.id;
 
   /* ==========================================================================
      STATE MANAGEMENT
@@ -90,11 +93,15 @@ const FoodCatalog = () => {
      CORE DATA SYNC ENGINE
      ========================================================================== */
   const fetchMenuCatalog = async (currentPage = page, pageLimit = pageSize) => {
-    if (!vendorId) return;
+    if (!effectiveVendorId) {
+        setIsLoading(false);
+        return;
+    }
+    
     setIsLoading(true);
 
     try {
-      const response = await FoodService.getByVendor(vendorId, {
+      const response = await FoodService.getByVendor(effectiveVendorId, {
         page: currentPage,
         limit: pageLimit,
         search: debouncedSearchTerm,
@@ -126,7 +133,7 @@ const FoodCatalog = () => {
 
   useEffect(() => {
     fetchMenuCatalog(page, pageSize);
-  }, [vendorId, page, pageSize, sort, debouncedSearchTerm, availabilityFilter]);
+  }, [effectiveVendorId, page, pageSize, sort, debouncedSearchTerm, availabilityFilter]);
 
   /* ==========================================================================
      ACTION & ROUTING EVENT HANDLERS
@@ -330,7 +337,7 @@ const FoodCatalog = () => {
                   <TableCell>
                     {item.image ? (
                       <img
-                        src={`${import.meta.env.VITE_STORAGE_URL}/${item.image}`}
+                        src={item.image}
                         alt={item.name}
                         className="w-12 h-12 rounded-xl object-cover border border-bg-light"
                       />
@@ -347,7 +354,7 @@ const FoodCatalog = () => {
                     {item.category}
                   </TableCell>
                   <TableCell className="font-mono text-sm text-success font-semibold">
-                    ₱{item.price.toFixed(2)}
+                    ₱{Number(item.price).toFixed(2)}
                   </TableCell>
 
                   <TableCell>
@@ -441,7 +448,7 @@ const FoodCatalog = () => {
       <CreateFoodModal
         isOpen={isCreateModalOpen}
         onClose={handleModalClose}
-        vendorId={vendorId!}
+        vendorId={effectiveVendorId?.toString() || ""}
         onSuccess={handleActionSuccess}
       />
       <EditFoodModal

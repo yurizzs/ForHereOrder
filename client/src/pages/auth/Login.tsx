@@ -36,9 +36,15 @@ const Login: React.FC = () => {
 
         setIsLoading(true);
         try {
-            await login({ username, password });
+            const userData = await login({ username, password });
             notify.success("Vendor terminal connected successfully!");
-            navigate(PATHS.APP.DASHBOARD, { replace: true });
+            
+            // Redirect based on role
+            if (userData.role === 'admin') {
+                navigate(PATHS.APP.ADMIN_DASHBOARD, { replace: true });
+            } else {
+                navigate(PATHS.APP.VENDOR_DASHBOARD, { replace: true });
+            }
         } catch (err) {
             const axiosErr = err as AxiosError<{ message?: string; errors?: Record<string, string[]> }>;
             const status = axiosErr.response?.status;

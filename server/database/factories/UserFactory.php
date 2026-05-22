@@ -25,7 +25,7 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $roles = [UserRole::GUEST, UserRole::ADMIN];
+        $roles = [UserRole::VENDOR, UserRole::ADMIN];
 
         $name = fake()->unique()->name();
 

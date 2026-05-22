@@ -46,6 +46,12 @@ const UserService = {
             AxiosInstance.post(`${BASE_PREFIX}/${id}`, data), 
             "Failed to update user"
         ),
+
+    updateProfile: (data: FormData) =>
+        handleRequest(
+            AxiosInstance.post(`profile`, data),
+            "Failed to update profile"
+        ),
     
     // for DELETE user http://localhost:8000/api/users/{id} (destroy)
     delete: (id: string | number) => 

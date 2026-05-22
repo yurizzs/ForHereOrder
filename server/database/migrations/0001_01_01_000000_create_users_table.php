@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->timestamp('username_verified_at')->nullable();
             $table->string('phone')->unique()->nullable();
-            $table->string('role')->default('guest');
+            $table->string('role')->default('vendor');
             $table->string('password');
             $table->enum('theme', ['light', 'dark', 'system'])->default('system');
             $table->rememberToken();

@@ -4,10 +4,12 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use App\Traits\ApiResponse;
 
 class UserController extends Controller
@@ -206,6 +208,40 @@ class UserController extends Controller
 
         return $this->success(
             "User restored successfully",
+            ['user' => new UserResource($user)],
+            200
+        );
+    }
+
+    /**
+     * Update the authenticated user's profile.
+     */
+    public function updateProfile(ProfileUpdateRequest $request)
+    {
+        $user = $request->user();
+        $validated = $request->validated();
+
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            $avatarFile = $request->file('avatar');
+            $filename = time() . '_' . uniqid() . '.' . $avatarFile->getClientOriginalExtension();
+            $path = $avatarFile->storeAs('avatars', $filename, 'public');
+            $validated['avatar'] = $path;
+        }
+
+        if (empty($validated['password'])) {
+            unset($validated['password']);
+            unset($validated['password_confirmation']);
+        }
+        unset($validated['password_confirmation']);
+
+        $user->update($validated);
+
+        return $this->success(
+            "Profile updated successfully",
             ['user' => new UserResource($user)],
             200
         );

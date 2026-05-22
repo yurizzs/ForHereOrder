@@ -38,10 +38,33 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
           path: user?.role === 'admin' ? PATHS.APP.ADMIN_DASHBOARD : PATHS.APP.VENDOR_DASHBOARD,
         },
         {
+          name: "Food Catalog",
+          icon: "FaUtensils",
+          path: PATHS.APP.FOOD_CATALOG,
+          roles: ['vendor'],
+        },
+        {
+          name: "Analytics",
+          icon: "FaChartLine",
+          path: PATHS.APP.VENDOR_ANALYTICS,
+          roles: ['vendor'],
+        },
+        {
           name: "Users",
           icon: "FaUsers",
           path: PATHS.APP.USERS,
           roles: ['admin'],
+        },
+      ],
+    },
+    {
+      group: "Settings",
+      items: [
+        {
+          name: "Shop Profile",
+          icon: "FaGear",
+          path: PATHS.APP.VENDOR_PROFILE,
+          roles: ['vendor'],
         },
       ],
     },

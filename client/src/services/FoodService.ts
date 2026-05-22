@@ -22,6 +22,20 @@ const FoodService = {
             "Failed to fetch food services"
         ),
 
+    // for GET food services by vendor
+    getByVendor: (vendor_id: string | number, params?: { 
+        search?: string; 
+        page?: number; 
+        limit?: number;
+        sort_by?: string;
+        sort_order?: 'asc' | 'desc';
+        filter_status?: 'all' | 'available' | 'low_stock' | 'out_of_stock';
+    }) => 
+        handleRequest(
+            AxiosInstance.get(`${BASE_PREFIX}`, { params: { ...params, vendor_id } }), 
+            "Failed to fetch vendor food services"
+        ),
+
     // for GET performance/analytics stats http://localhost:8000/api/foodservices/stats
     getStats: () =>
         handleRequest(

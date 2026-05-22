@@ -34,7 +34,7 @@ export const ProtectedRoute: React.FC = () => {
  * Redirects to dashboard if already logged in.
  */
 export const VendorRoute: React.FC = () => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
 
   if (isLoading) {
     return (
@@ -42,8 +42,9 @@ export const VendorRoute: React.FC = () => {
     );
   }
 
-  if (isAuthenticated) {
-    return <Navigate to={PATHS.APP.DASHBOARD} replace />;
+  if (isAuthenticated && user) {
+    const dashboardPath = user.role === 'admin' ? PATHS.APP.ADMIN_DASHBOARD : PATHS.APP.VENDOR_DASHBOARD;
+    return <Navigate to={dashboardPath} replace />;
   }
 
   return (
@@ -80,7 +81,10 @@ export const RoleRoute: React.FC<RoleRouteProps> = ({ allowedRoles }) => {
           <Button
             variant="primary"
             iconName="FaArrowLeft"
-            onClick={() => navigate(PATHS.APP.DASHBOARD, { replace: true })}
+            onClick={() => {
+              const dashboardPath = user?.role === 'admin' ? PATHS.APP.ADMIN_DASHBOARD : PATHS.APP.VENDOR_DASHBOARD;
+              navigate(dashboardPath, { replace: true });
+            }}
           >
             Back to Dashboard
           </Button>

@@ -10,6 +10,8 @@ const Login = React.lazy(() => import("../pages/auth/Login"));
 const UserDashboard = React.lazy(() => import("../pages/user/AdminDashboard"));
 const VendorDashboard = React.lazy(() => import("../pages/vendor/VendorDashboard"));
 const FoodCatalog = React.lazy(() => import("../pages/vendor/FoodCatalog"));
+const VendorProfile = React.lazy(() => import("../pages/vendor/VendorProfile"));
+const VendorAnalytics = React.lazy(() => import("../pages/vendor/VendorAnalytics"));
 const Users = React.lazy(() => import("../pages/user/User"));
 const ViewUserDetail = React.lazy(() => import("../pages/user/components/ViewUserModal"));
 
@@ -87,6 +89,14 @@ export const Routes = createBrowserRouter([
                   {
                     path: PATHS.APP.FOOD_CATALOG,
                     element: <FoodCatalog />,
+                  },
+                  {
+                    path: PATHS.APP.VENDOR_PROFILE,
+                    element: <VendorProfile />,
+                  },
+                  {
+                    path: PATHS.APP.VENDOR_ANALYTICS,
+                    element: <VendorAnalytics />,
                   },
                 ],
               },

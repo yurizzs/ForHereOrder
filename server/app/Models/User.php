@@ -83,4 +83,12 @@ class User extends Authenticatable
 
         return $slug;
     }
+
+    /**
+     * Get the food items for the vendor.
+     */
+    public function foods(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Food::class, 'vendor_id');
+    }
 }

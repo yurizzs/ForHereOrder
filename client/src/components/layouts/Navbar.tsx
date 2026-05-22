@@ -137,7 +137,6 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
 
                   {/* Menu Items */}
                   <div className="py-1.5">
-
                     {/* Theme Toggle */}
                     <button
                       id="theme-toggle-btn"

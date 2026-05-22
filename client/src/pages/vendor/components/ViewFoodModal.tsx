@@ -160,7 +160,7 @@ const FoodDetail = () => {
                             {/* Title & Status */}
                             <div className="space-y-1.5 w-full">
                                 <h2 className="text-lg font-bold text-text truncate">{food.name}</h2>
-                                <span className="block text-xs font-medium text-text-muted capitalize bg-bg/50 py-1 px-2.5 rounded-md inline-block">
+                                <span className=" text-xs font-medium text-text-muted capitalize bg-bg/50 py-1 px-2.5 rounded-md inline-block">
                                     {food.category}
                                 </span>
                             </div>
