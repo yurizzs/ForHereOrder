@@ -39,6 +39,29 @@ const AuthService = {
             AxiosInstance.post("auth/logout"),
             "Logout failed."
         ),
+
+    /**
+     * Register a new student user.
+     */
+    registerStudent: (
+        name: string,
+        username: string,
+        email: string,
+        password: string,
+        password_confirmation: string,
+        phone?: string
+    ) =>
+        handleRequest(
+            AxiosInstance.post("auth/register/student", {
+                name,
+                username,
+                email,
+                phone,
+                password,
+                password_confirmation,
+            }),
+            "Student registration failed"
+        ),
 };
 
 export default AuthService;

@@ -7,6 +7,7 @@ use App\Models\Food;
 use App\Http\Resources\FoodResource;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
+use Illuminate\Validation\Rule;
 
 class FoodController extends Controller
 {
@@ -17,13 +18,16 @@ class FoodController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Food::query();
+        $query = Food::query()
+            ->whereHas('vendor', fn ($vendor) => $vendor->where('role', 'vendor'));
 
         // Search functionality
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
-            $query->where('name', 'like', "%{$search}%")
-                  ->orWhere('category', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('category', 'like', "%{$search}%");
+            });
         }
 
         // Filtering by vendor if provided
@@ -35,7 +39,11 @@ class FoodController extends Controller
         if ($request->has('filter_status')) {
             switch ($request->filter_status) {
                 case 'available':
-                    $query->where('is_available', true)->where('stock_qty', '>', 0);
+                    $query->where('is_available', true)
+                        ->where(function ($q) {
+                            $q->where('track_stock', false)
+                                ->orWhere('stock_qty', '>', 0);
+                        });
                     break;
                 case 'low_stock':
                     $query->where('track_stock', true)->where('stock_qty', '<=', 5)->where('stock_qty', '>', 0);
@@ -83,7 +91,10 @@ class FoodController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'vendor_id' => 'required|exists:users,id',
+            'vendor_id' => [
+                'required',
+                Rule::exists('users', 'id')->where('role', 'vendor'),
+            ],
             'name' => 'required|string|max:255',
             'category' => 'required|string|max:100',
             'price' => 'required|numeric|min:0',

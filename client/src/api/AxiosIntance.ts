@@ -23,6 +23,11 @@ AxiosInstance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = getCookie("XSRF-TOKEN");
   if (token) config.headers["X-XSRF-TOKEN"] = token;
 
+  const authToken = localStorage.getItem("auth_token");
+  if (authToken) {
+    config.headers["Authorization"] = `Bearer ${authToken}`;
+  }
+
   config.headers["X-Requested-With"] = "XMLHttpRequest";
   config.headers["Accept"] = "application/json";
 

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserRole;
 use App\Models\Food;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -19,7 +20,7 @@ class FoodFactory extends Factory
     public function definition(): array
     {
         return [
-            'vendor_id' => User::factory(),
+            'vendor_id' => User::factory()->state(['role' => UserRole::VENDOR]),
             'name' => $this->faker->words(3, true),
             'category' => $this->faker->randomElement(['Main Course', 'Appetizer', 'Dessert', 'Beverage', 'Side Dish']),
             'price' => $this->faker->randomFloat(2, 5, 50),

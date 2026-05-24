@@ -1,11 +1,12 @@
 // 3. Your core Menu registry
 export interface Food {
     id: number;
+    vendor_id: number;
     name: string;
     category: string;
     price: number;
     description?: string;
-    image: string;   // Add this! Stores the Laravel storage or S3 bucket path
+    image: string | null;
     track_stock: boolean;
     stock_qty: number;
     is_available: boolean;

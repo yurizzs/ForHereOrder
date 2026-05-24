@@ -1,17 +1,20 @@
 import React from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { PATHS } from "./path";
+import { getDashboardPath, PATHS } from "./path";
 import { ProtectedRoute, VendorRoute, RoleRoute } from "./guards";
 import { useAuth } from "../contexts/AuthContext";
 import RootLayout from "./RootLayout";
 
 // Lazy Loading
 const Login = React.lazy(() => import("../pages/auth/Login"));
+const Register = React.lazy(() => import("../pages/auth/Register"));
 const UserDashboard = React.lazy(() => import("../pages/user/AdminDashboard"));
 const VendorDashboard = React.lazy(() => import("../pages/vendor/VendorDashboard"));
 const FoodCatalog = React.lazy(() => import("../pages/vendor/FoodCatalog"));
 const VendorProfile = React.lazy(() => import("../pages/vendor/VendorProfile"));
 const VendorAnalytics = React.lazy(() => import("../pages/vendor/VendorAnalytics"));
+const StudentDashboard = React.lazy(() => import("../pages/student/StudentDashboard"));
+const StudentOrderHistory = React.lazy(() => import("../pages/student/StudentOrderHistory"));
 const Users = React.lazy(() => import("../pages/user/User"));
 const ViewUserDetail = React.lazy(() => import("../pages/user/components/ViewUserModal"));
 
@@ -20,10 +23,10 @@ const ViewUserDetail = React.lazy(() => import("../pages/user/components/ViewUse
  */
 const RoleBasedRedirect = () => {
   const { user } = useAuth();
-  if (user?.role === "admin") {
-    return <Navigate to={PATHS.APP.ADMIN_DASHBOARD} replace />;
+  if (user) {
+    return <Navigate to={getDashboardPath(user.role)} replace />;
   }
-  return <Navigate to={PATHS.APP.VENDOR_DASHBOARD} replace />;
+  return <Navigate to={PATHS.LOGIN} replace />;
 };
 
 export const Routes = createBrowserRouter([
@@ -44,6 +47,10 @@ export const Routes = createBrowserRouter([
             path: PATHS.LOGIN,
             element: <Login />,
           },
+          {
+            path: PATHS.REGISTER,
+            element: <Register />,
+          }
         ],
       },
 
@@ -97,6 +104,21 @@ export const Routes = createBrowserRouter([
                   {
                     path: PATHS.APP.VENDOR_ANALYTICS,
                     element: <VendorAnalytics />,
+                  },
+                ],
+              },
+              
+              // Student Only
+              {
+                element: <RoleRoute allowedRoles={['student']} />,
+                children: [
+                  {
+                    path: PATHS.APP.STUDENT_DASHBOARD,
+                    element: <StudentDashboard />,
+                  },
+                  {
+                    path: PATHS.APP.STUDENT_ORDERS,
+                    element: <StudentOrderHistory />,
                   },
                 ],
               },

@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Icon } from "../ui";
 import * as FaIcons from 'react-icons/fa6';
-import { PATHS } from "../../routes/path";
+import { getDashboardPath, PATHS } from "../../routes/path";
 import { useAuth } from "../../contexts/AuthContext";
 import type { Role } from "../../interfaces/user";
 
@@ -35,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
         {
           name: "Dashboard",
           icon: "FaHouse",
-          path: user?.role === 'admin' ? PATHS.APP.ADMIN_DASHBOARD : PATHS.APP.VENDOR_DASHBOARD,
+          path: user ? getDashboardPath(user.role) : PATHS.APP.STUDENT_DASHBOARD,
         },
         {
           name: "Food Catalog",
@@ -48,6 +48,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
           icon: "FaChartLine",
           path: PATHS.APP.VENDOR_ANALYTICS,
           roles: ['vendor'],
+        },
+        {
+          name: "My Orders",
+          icon: "FaReceipt",
+          path: PATHS.APP.STUDENT_ORDERS,
+          roles: ['student'],
         },
         {
           name: "Users",

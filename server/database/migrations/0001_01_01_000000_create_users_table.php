@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->string('name');
             $table->string('username')->unique();
+            $table->string('email')->unique()->nullable();
             $table->timestamp('username_verified_at')->nullable();
             $table->string('phone')->unique()->nullable();
             $table->string('role')->default('vendor');

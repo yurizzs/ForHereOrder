@@ -3,9 +3,11 @@
 use App\Http\Controllers\API\v1\AuthenticationController;
 use App\Http\Controllers\API\v1\UserController;
 use App\Http\Controllers\API\v1\FoodController;
+use App\Http\Controllers\API\v1\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('auth/login', [AuthenticationController::class, 'login']);
+Route::post('auth/register/student', [AuthenticationController::class, 'registerStudent']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -23,5 +25,5 @@ Route::middleware('auth:sanctum')->group(function () {
     // Vendor/Auth Access
     Route::apiResource('foodservices', FoodController::class);
     Route::get('orders/settlement', [OrderController::class, 'settlement']);
-    Route::apiResource('orders', OrderController::class)->only(['index', 'update', 'show']);
+    Route::apiResource('orders', OrderController::class)->only(['index', 'store', 'update', 'show']);
 });

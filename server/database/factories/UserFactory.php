@@ -33,6 +33,7 @@ class UserFactory extends Factory
             'slug' => Str::slug($name),
             'name' => $name,
             'username' => fake()->unique()->userName(),
+            'email' => fake()->unique()->safeEmail(),
             'username_verified_at' => now(),
             'phone' => '+639' . fake()->numerify('#########'),
             'role' => fake()->randomElement($roles),

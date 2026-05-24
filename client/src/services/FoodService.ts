@@ -13,6 +13,7 @@ const FoodService = {
         sort_by?: string;
         sort_order?: 'asc' | 'desc';
         filter?: 'active' | 'deleted' | 'all';
+        filter_status?: 'all' | 'available' | 'low_stock' | 'out_of_stock';
         category?: string;            // Filter by culinary category (e.g., Fast Food, Bakery)
         status?: 'open' | 'closed';   // Operational status filtering
         vendor_id?: string | number;  // Support vendor scoping

@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { PATHS } from "./path";
+import { getDashboardPath, PATHS } from "./path";
 import { LoadingSpinner, Button } from "../components/ui";
 import type { Role } from "../interfaces/user";
 
@@ -30,7 +30,7 @@ export const ProtectedRoute: React.FC = () => {
 };
 
 /**
- * Wraps vendor-only routes (login, register).
+ * Wraps guest-only routes (login, register).
  * Redirects to dashboard if already logged in.
  */
 export const VendorRoute: React.FC = () => {
@@ -43,8 +43,7 @@ export const VendorRoute: React.FC = () => {
   }
 
   if (isAuthenticated && user) {
-    const dashboardPath = user.role === 'admin' ? PATHS.APP.ADMIN_DASHBOARD : PATHS.APP.VENDOR_DASHBOARD;
-    return <Navigate to={dashboardPath} replace />;
+    return <Navigate to={getDashboardPath(user.role)} replace />;
   }
 
   return (
@@ -82,8 +81,7 @@ export const RoleRoute: React.FC<RoleRouteProps> = ({ allowedRoles }) => {
             variant="primary"
             iconName="FaArrowLeft"
             onClick={() => {
-              const dashboardPath = user?.role === 'admin' ? PATHS.APP.ADMIN_DASHBOARD : PATHS.APP.VENDOR_DASHBOARD;
-              navigate(dashboardPath, { replace: true });
+              navigate(getDashboardPath(user.role), { replace: true });
             }}
           >
             Back to Dashboard

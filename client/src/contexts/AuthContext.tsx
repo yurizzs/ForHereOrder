@@ -10,6 +10,7 @@ interface AuthContextType {
     login: (credentials: { username: string; password: string }) => Promise<User>;
     logout: () => Promise<void>;
     refreshUser: () => Promise<void>;
+    setUserStateFromRegistration: (userData: User) => void;
 }
 
 
@@ -19,6 +20,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    const setUserStateFromRegistration = useCallback((userData: User) => {
+        setUser(userData);
+        setIsLoading(false); // Assuming registration means we're no longer loading auth state
+    }, []);
 
     /**
      * Fetch current user from /api/user/auth/me
@@ -52,6 +58,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         await AuthService.csrf();
         const res = await AuthService.login(credentials) as any;
         const userData = res?.data?.data?.user ?? null;
+        const token = res?.data?.data?.token;
+        if (token) {
+            localStorage.setItem("auth_token", token);
+        }
         setUser(userData);
         return userData;
     };
@@ -61,6 +71,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
      */
     const logout = async () => {
         await AuthService.logout();
+        localStorage.removeItem("auth_token");
         setUser(null);
     };
 
@@ -73,6 +84,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 login,
                 logout,
                 refreshUser,
+                setUserStateFromRegistration,
             }}
         >
             {children}

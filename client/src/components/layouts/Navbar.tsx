@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { PATHS } from "../../routes/path";
+import { getDashboardPath, PATHS } from "../../routes/path";
 import { Icon } from "../ui";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -54,9 +54,9 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
               className="p-2 mr-2 text-text-muted rounded-lg sm:hidden focus:outline-none cursor-pointer">
               <Icon iconName="FaAlignJustify" />
             </span>
-            <Link to={user?.role === 'admin' ? PATHS.APP.ADMIN_DASHBOARD : PATHS.APP.VENDOR_DASHBOARD} className="flex gap-3 items-center">
+            <Link to={user ? getDashboardPath(user.role) : PATHS.LOGIN} className="flex gap-3 items-center">
               <img src={Logo} alt="App Logo" />
-              <span className="text-text font-black text-lg tracking-tighter uppercase italic hidden sm:block">YU ReactLaravel</span>
+              <span className="text-text font-black text-lg tracking-tighter uppercase italic hidden sm:block">ForHereOrder?</span>
             </Link>
           </div>
 
